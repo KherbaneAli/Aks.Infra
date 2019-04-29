@@ -1,0 +1,45 @@
+version: "3.2"
+
+services:
+  teamcity: 
+    image: jetbrains/teamcity-server:latest
+    restart: always
+    networks: 
+      - local
+    volumes:
+      - teamcity-server-datadir:/data/teamcity_server/datadir
+      - teamcity-server-logs:/opt/teamcity/logs
+    ports:
+      - 8111:8111
+  
+  teamcity-agent: 
+    image: jetbrains/teamcity-agent:latest
+    restart: always
+    networks:
+      - local
+    environment:
+      - SERVER_URL=http://teamcity:8111
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  
+  local-registry:
+    image: registry:latest
+    restart: always
+    networks:
+      - local
+    volumes:
+      - registry:/var/lib/registry
+    ports:
+      - "55000:5000"
+
+volumes:
+  teamcity-server-datadir:
+  teamcity-server-logs:
+  registry:
+
+networks: 
+  local:
+    driver: bridge
+
+  
+  

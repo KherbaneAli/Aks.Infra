@@ -1,0 +1,3 @@
+name: AzureAks
+runtime: nodejs
+description: Aks configuratrion in Azure
